@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="tl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagtatanong at Pagmumungkahi | Interactive Review Hub</title>
+  <meta name="description" content="Modernong plataporma sa pag-aaral ng Sining, Etika, at Ekspresyong Gramatikal sa Pagtatanong at Pagmumungkahi.">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+  <!-- TOP ANNOUNCEMENT & PROGRESS BAR -->
+  <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-sky-700 text-white text-xs font-semibold py-2 px-4 shadow-sm no-print">
+    <div class="max-w-6xl mx-auto flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded-full bg-white/20 text-white font-bold text-[11px] uppercase tracking-wider">
+          <i class="fa-solid fa-graduation-cap"></i> Filipino sa Komunikasyon
+        </span>
+        <span class="hidden sm:inline">Pagtatanong at Pagmumungkahi (Sining, Etika, at Retorika)</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-white/80 text-[11px]">Kabuuang Pag-unlad:</span>
+          <div class="w-24 sm:w-36 h-2 bg-white/20 rounded-full overflow-hidden">
+            <div id="overall-progress-bar" class="h-full bg-amber-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <span id="overall-progress-text" class="font-bold text-white text-xs">0%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE HEADER -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg font-bold shadow-md shadow-blue-500/20">
+          <i class="fa-solid fa-comments"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+            Pagtatanong at Pagmumungkahi
+          </h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">
+            Sining, Etika, at Ekspresyong Gramatikal • Interactive Review Hub
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Actions (Dark Mode, Sound, Print) -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <button id="sound-toggle-btn" type="button" class="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition" title="Tunog On/Off">
+          <i id="sound-icon" class="fa-solid fa-volume-high text-emerald-500"></i>
+        </button>
+
+        <button id="theme-toggle-btn" type="button" class="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition" title="Palitan ang Tema (Dark/Light)">
+          <i id="theme-icon" class="fa-solid fa-moon"></i>
+        </button>
+
+        <button onclick="window.print()" type="button" class="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="I-print ang tala">
+          <i class="fa-solid fa-print"></i> I-print
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN NAVIGATION TABS -->
+    <div class="border-t border-slate-200/80 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/60 px-4 py-2">
+      <nav class="max-w-6xl mx-auto flex items-center justify-between sm:justify-start gap-1 sm:gap-2 overflow-x-auto no-scrollbar">
+        <button type="button" class="nav-tab flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-blue-700 shadow-sm dark:bg-slate-800 dark:text-blue-400 border border-slate-200/70 dark:border-slate-700 transition" data-tab="notes" aria-selected="true">
+          <i class="fa-solid fa-book-open"></i>
+          <span>1. Study Notes</span>
+        </button>
+        <button type="button" class="nav-tab flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50 transition" data-tab="flashcards" aria-selected="false">
+          <i class="fa-solid fa-clone"></i>
+          <span>2. Flashcards</span>
+        </button>
+        <button type="button" class="nav-tab flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50 transition" data-tab="builder" aria-selected="false">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>3. Interactive Builder</span>
+        </button>
+        <button type="button" class="nav-tab flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50 transition" data-tab="quiz" aria-selected="false">
+          <i class="fa-solid fa-list-check"></i>
+          <span>4. Practice Quiz</span>
+          <span class="px-1.5 py-0.2 rounded-md bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-[10px] font-black">40</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- ========================================================
+         TAB 1: STUDY NOTES (KUMPLETONG TALA)
+         ======================================================== -->
+    <section id="notes-tab" class="tab-pane space-y-6">
+      <!-- Section Intro & Controls -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-xl">
+        <div class="space-y-1">
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/30 text-blue-200 uppercase tracking-widest inline-block">
+            Modyul 1
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">EIA bat ka tinatamad</h2>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-2xl">
+            Suriin ang mga aralin sa pamamagitan ng interactive accordion. Bawat paksang mabuksan ay awtomatikong magdaragdag sa iyong kabuuang progreso.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 self-start md:self-auto shrink-0">
+          <button id="notes-expand-all" type="button" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition flex items-center gap-1.5">
+            <i class="fa-solid fa-angles-down"></i> Buksan Lahat
+          </button>
+          <button id="notes-collapse-all" type="button" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition flex items-center gap-1.5">
+            <i class="fa-solid fa-angles-up"></i> Itupi Lahat
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Search Bar -->
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <input id="notes-search-input" type="text" placeholder="Maghanap ng paksa (hal. 3 E's, Probing, Modals, Barrelled)..." class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition text-sm">
+      </div>
+
+      <!-- Accordion Notes Container -->
+      <div id="study-notes-container" class="space-y-4">
+        <!-- Rendered by JavaScript -->
+      </div>
+
+      <!-- Quick Reference Summary Cheat Sheet -->
+      <div class="p-6 rounded-3xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+        <div class="flex items-center gap-2 text-blue-700 dark:text-blue-400 font-bold text-sm uppercase tracking-wider">
+          <i class="fa-solid fa-bookmark"></i>
+          <span>Mabilisang Buod (Cheat Sheet sa Rebyu)</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80">
+            <h4 class="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              3 Uri ng Pagtatanong
+            </h4>
+            <ul class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2">
+              <li><strong>1. Clarifying:</strong> Naglilinaw upang maiwasan ang maling hinuha (misconception).</li>
+              <li><strong>2. Probing:</strong> Nagpapalalim para sa karagdagang detalye at implicit na kahulugan.</li>
+              <li><strong>3. Analytical:</strong> Sumusuri sa kredibilidad ng datos, lohika, at metodolohiya.</li>
+            </ul>
+          </div>
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80">
+            <h4 class="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              3 Haligi ng Mungkahi
+            </h4>
+            <ul class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2">
+              <li><strong>1. Ideya (Proposal):</strong> Ang suhestiyon o alternatibong aksiyon.</li>
+              <li><strong>2. Paliwanag (Rationale):</strong> Ang dahilan o pakinabang kung bakit makatutulong.</li>
+              <li><strong>3. Batayan (Evidence):</strong> Ang datos, sarbey, o obserbasyong pinagbabatayan.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TAB 2: FLASHCARDS (ACTIVE RECALL)
+         ======================================================== -->
+    <section id="flashcards-tab" class="tab-pane hidden space-y-6">
+      <!-- Section Header & Progress -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 text-white shadow-xl">
+        <div class="space-y-1">
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/30 text-indigo-200 uppercase tracking-widest inline-block">
+            Modyul 2
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Flashcard Deck: Active Recall</h2>
+          <p class="text-xs sm:text-sm text-slate-300">
+            I-click ang kard upang baligtarin. Gamitin ang Arrow Keys para lumipat at Spacebar para mag-flip.
+          </p>
+        </div>
+        <div class="bg-white/10 p-3.5 rounded-2xl border border-white/10 shrink-0 min-w-[200px]">
+          <div class="flex items-center justify-between text-xs font-bold text-white mb-1.5">
+            <span>Progreso sa Deck:</span>
+            <span id="fc-mastered-count">0 / 18 Mastered</span>
+          </div>
+          <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+            <div id="fc-mastered-bar" class="h-full bg-amber-400 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flashcard 3D Interactive Card Container -->
+      <div class="max-w-2xl mx-auto perspective-1000">
+        <div id="flashcard-card" class="relative w-full h-[360px] sm:h-[400px] cursor-pointer select-none">
+          <div id="flashcard-inner" class="flashcard-inner shadow-xl">
+            
+            <!-- FRONT SIDE -->
+            <div class="flashcard-front p-8 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-colors">
+              <div class="flex items-center justify-between">
+                <span id="fc-topic-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-300 uppercase tracking-wide">
+                  Paksa
+                </span>
+                <span id="fc-mastered-badge" class="hidden px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 flex items-center gap-1">
+                  <i class="fa-solid fa-star"></i> Mastered
+                </span>
+              </div>
+
+              <div class="my-auto py-4">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Termino / Konsepto</span>
+                <h3 id="fc-term" class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white leading-tight">
+                  --
+                </h3>
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-slate-400 dark:text-slate-500 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <span class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-rotate"></i> I-click para baligtarin
+                </span>
+                <span id="fc-count-text">Kard 1 sa 18</span>
+              </div>
+            </div>
+
+            <!-- BACK SIDE -->
+            <div class="flashcard-back p-8 bg-gradient-to-br from-slate-900 to-indigo-950 text-white border-2 border-indigo-700/50">
+              <div class="flex items-center justify-between">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/10 text-indigo-300 uppercase tracking-wide">
+                  Kahulugan at Katangian
+                </span>
+                <span class="text-xs text-indigo-300 flex items-center gap-1">
+                  <i class="fa-solid fa-lightbulb"></i> Sagot
+                </span>
+              </div>
+
+              <div class="my-auto py-4">
+                <p id="fc-definition" class="text-base sm:text-lg text-slate-100 font-medium leading-relaxed">
+                  --
+                </p>
+                <div class="mt-4 p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-indigo-200">
+                  <strong class="text-amber-300">Pahiwatig / Halimbawa:</strong> <span id="fc-hint">--</span>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-indigo-300/80 pt-4 border-t border-white/10">
+                <span class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-rotate"></i> I-click muli para sa harap
+                </span>
+                <span>Active Recall Test</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls & Actions -->
+      <div class="max-w-2xl mx-auto flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center gap-2">
+          <button id="fc-prev-btn" type="button" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-bold text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-arrow-left"></i> Nakaraan
+          </button>
+          <button id="fc-next-btn" type="button" class="px-4 py-2.5 rounded-xl bg-blue-600 font-bold text-sm text-white hover:bg-blue-700 transition flex items-center gap-2 shadow-md shadow-blue-500/20">
+            Susunod <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="fc-shuffle-btn" type="button" class="px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center gap-1.5" title="Balasahin ang Deck">
+            <i class="fa-solid fa-shuffle text-indigo-500"></i> Balasahin
+          </button>
+          <button id="fc-master-btn" type="button" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-amber-100 hover:text-amber-700 dark:hover:bg-slate-600 transition flex items-center gap-2">
+            <i class="fa-regular fa-star"></i> Mark As Mastered
+          </button>
+          <button id="fc-reset-mastered-btn" type="button" class="px-3 py-2.5 rounded-xl text-xs text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition" title="I-reset ang Mastered cards">
+            <i class="fa-solid fa-arrow-rotate-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Keyboard shortcuts legend -->
+      <div class="max-w-2xl mx-auto p-3 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 flex items-center justify-center gap-4 flex-wrap">
+        <span><kbd class="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono text-[10px]">Space</kbd> / <kbd class="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono text-[10px]">Enter</kbd> Flip</span>
+        <span><kbd class="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono text-[10px]">←</kbd> Nakaraan</span>
+        <span><kbd class="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono text-[10px]">→</kbd> Susunod</span>
+        <span><kbd class="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono text-[10px]">M</kbd> Mastered Toggle</span>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TAB 3: INTERACTIVE BUILDER (SANAYAN SA MUNGKAHI AT TANONG)
+         ======================================================== -->
+    <section id="builder-tab" class="tab-pane hidden space-y-8">
+      <!-- Section Intro -->
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-teal-900 via-emerald-900 to-slate-900 text-white shadow-xl space-y-1">
+        <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-500/30 text-teal-200 uppercase tracking-widest inline-block">
+          Modyul 3
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">3-Pillar Suggestion Builder & Fix-It Lab</h2>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-2xl">
+          Bumuo ng pormal, kagalang-galang, at may matibay na batayang mungkahi gamit ang 3 Haligi (Ideya, Paliwanag, Batayan) at magsanay sa pag-aayos ng mga maling pahayag.
+        </p>
+      </div>
+
+      <!-- MAIN BUILDER WORKSPACE (2 Columns) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Form Inputs (7 cols) -->
+        <div class="lg:col-span-7 space-y-5 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-blue-600"></i> Mga Sangkap ng Mungkahi
+            </h3>
+            <button id="builder-clear-btn" type="button" class="text-xs font-semibold text-slate-400 hover:text-rose-500 transition">
+              <i class="fa-solid fa-trash-can"></i> Linisin ang Form
+            </button>
+          </div>
+
+          <!-- Quick Presets -->
+          <div>
+            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+              O Pumili ng Halimbawang Sitwasyon:
+            </label>
+            <div id="builder-presets-container" class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Input 0: Grammatical Expression Dropdown -->
+          <div>
+            <label for="builder-expression-select" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+              Panimulang Ekspresyong Gramatikal:
+            </label>
+            <select id="builder-expression-select" class="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <optgroup label="Pormal na Panimula">
+                <option value="Iminumungkahi po naming" selected>Iminumungkahi po naming...</option>
+                <option value="Inirerekomenda ng aming pangkat na">Inirerekomenda ng aming pangkat na...</option>
+                <option value="Isang magandang alternatibo ang">Isang magandang alternatibo ang...</option>
+              </optgroup>
+              <optgroup label="Modals / Pagpapalambot ng Tono">
+                <option value="Maaari po nating subukan na">Maaari po nating subukan na...</option>
+                <option value="Makabubuti po siguro kung">Makabubuti po siguro kung...</option>
+                <option value="Baka sakaling makatulong kung">Baka sakaling makatulong kung...</option>
+              </optgroup>
+              <optgroup label="Anyong Patanong / Pagsangguni">
+                <option value="Ano kaya kung subukan nating">Ano kaya kung subukan nating...?</option>
+                <option value="Paano kung maglaan tayo ng paraan para sa">Paano kung maglaan tayo ng paraan para sa...?</option>
+              </optgroup>
+              <optgroup label="Kondisyonal na Pahayag">
+                <option value="Sakaling piliin natin na">Sakaling piliin natin na...</option>
+                <option value="Kung idaragdag natin na">Kung idaragdag natin na...</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <!-- Input 1: Ideya (Proposal) -->
+          <div>
+            <label for="builder-ideya-input" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+              <span class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+                1. Ideya (Proposal) — Ang konkretong plano o aksiyon:
+              </span>
+              <span class="text-[11px] text-slate-400 font-normal lowercase">"Ano ang gagawin?"</span>
+            </label>
+            <textarea id="builder-ideya-input" rows="2" class="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder-slate-400" placeholder="Hal: magtakda ng lingguhang peer-consultation tuwing Miyerkules"></textarea>
+          </div>
+
+          <!-- Input 2: Paliwanag (Rationale) -->
+          <div>
+            <label for="builder-paliwanag-input" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+              <span class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-violet-600"></span>
+                2. Paliwanag (Rationale) — Ang katuwiran at benepisyo:
+              </span>
+              <span class="text-[11px] text-slate-400 font-normal lowercase">"Bakit ito makatutulong?"</span>
+            </label>
+            <textarea id="builder-paliwanag-input" rows="2" class="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:outline-none placeholder-slate-400" placeholder="Hal: upang magkaroon ng sapat na oras ang bawat miyembro na marebisa ang burador"></textarea>
+          </div>
+
+          <!-- Input 3: Batayan (Evidence) -->
+          <div>
+            <label for="builder-batayan-input" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+              <span class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                3. Batayan (Evidence) — Datos, ulat, o obserbasyon:
+              </span>
+              <span class="text-[11px] text-slate-400 font-normal lowercase">"Saan nagmula ang patunay?"</span>
+            </label>
+            <textarea id="builder-batayan-input" rows="2" class="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none placeholder-slate-400" placeholder="Hal: batay sa 65% na naantalang submission noong nakaraang buwan"></textarea>
+          </div>
+        </div>
+
+        <!-- Right Column: Real-time Preview & Quality Checker (5 cols) -->
+        <div class="lg:col-span-5 space-y-5 flex flex-col">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <i class="fa-solid fa-eye text-blue-500"></i> Live Preview ng Pahayag
+                </span>
+                <span id="builder-quality-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 flex items-center gap-1">
+                  Nagsisimula Pa Lamang
+                </span>
+              </div>
+
+              <!-- Output Box -->
+              <div id="builder-preview-output" class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 min-h-[160px] flex items-center">
+                <!-- Live text populated by JS -->
+              </div>
+            </div>
+
+            <!-- 4-Pillar Quality Checklist -->
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-2">
+              <span class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider block mb-2">
+                Suriin ang Bilis at Husay (Rubric Check):
+              </span>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="flex items-center gap-2">
+                  <span id="chk-expr" class="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-400 flex items-center justify-center text-xs"><i class="fa-solid fa-minus"></i></span>
+                  <span class="text-slate-700 dark:text-slate-300">Ekspresyon / Modal</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="chk-ideya" class="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-400 flex items-center justify-center text-xs"><i class="fa-solid fa-minus"></i></span>
+                  <span class="text-slate-700 dark:text-slate-300">Ideya (Proposal)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="chk-paliwanag" class="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-400 flex items-center justify-center text-xs"><i class="fa-solid fa-minus"></i></span>
+                  <span class="text-slate-700 dark:text-slate-300">Paliwanag (Rationale)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="chk-batayan" class="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-400 flex items-center justify-center text-xs"><i class="fa-solid fa-minus"></i></span>
+                  <span class="text-slate-700 dark:text-slate-300">Batayan (Evidence)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action: Copy to Clipboard -->
+            <button id="builder-copy-btn" type="button" class="w-full py-3.5 px-4 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition flex items-center justify-center gap-2 shadow-md shadow-blue-500/20">
+              <i class="fa-solid fa-copy"></i> Kopyahin ang Buong Pahayag
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PART 2: FIX-IT CHALLENGE SCENARIOS -->
+      <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+              🛠️ Sanayan sa Pagwawasto (Fix-It Challenge)
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              Subukang baguhin ang mga maling tanong at bastos na utos sa ibaba upang maging magalang at mabisang pahayag.
+            </p>
+          </div>
+        </div>
+
+        <div id="fixit-scenarios-container" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TAB 4: PRACTICE QUIZ (40 ITEMS ENGINE)
+         ======================================================== -->
+    <section id="quiz-tab" class="tab-pane hidden space-y-6">
+      <!-- Section Intro & Status Bar -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-gradient-to-r from-blue-900 via-sky-900 to-indigo-950 text-white shadow-xl">
+        <div class="space-y-1">
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/30 text-blue-200 uppercase tracking-widest inline-block">
+            Modyul 4
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">40-Item Practice Quiz & Exam Engine</h2>
+          <p class="text-xs sm:text-sm text-slate-300">
+            Naglalaman ng 15 Multiple Choice, 10 Identification, 10 Tama o Mali, at 5 Sitwasyonal na Pagsusuri na may agarang paliwanag.
+          </p>
+        </div>
+
+        <!-- Mode Toggle & Score Card -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <!-- Practice vs Exam Switcher -->
+          <div class="bg-white/10 p-1.5 rounded-xl border border-white/10 flex items-center gap-1">
+            <button type="button" class="quiz-mode-toggle px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-blue-900 shadow-sm transition" data-mode="practice">
+              <i class="fa-solid fa-graduation-cap"></i> Practice Mode
+            </button>
+            <button type="button" class="quiz-mode-toggle px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition" data-mode="exam">
+              <i class="fa-solid fa-stopwatch"></i> Exam Mode
+            </button>
+          </div>
+
+          <div class="bg-white/15 px-4 py-2 rounded-xl text-center border border-white/10">
+            <span class="text-[10px] uppercase font-bold text-blue-200 block">Iskor sa Pagsusulit</span>
+            <span id="quiz-live-score" class="text-base font-black text-amber-300">0 / 40 (0%)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters & Actions Toolbar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <!-- Category Filter Tabs -->
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <button type="button" class="quiz-cat-filter px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow-sm transition" data-category="all">
+            Lahat (40)
+          </button>
+          <button type="button" class="quiz-cat-filter px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-category="mc">
+            Multiple Choice (15)
+          </button>
+          <button type="button" class="quiz-cat-filter px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-category="id">
+            Identification (10)
+          </button>
+          <button type="button" class="quiz-cat-filter px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-category="tf">
+            Tama o Mali (10)
+          </button>
+          <button type="button" class="quiz-cat-filter px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-category="Sitwasyonal">
+            Sitwasyonal (5)
+          </button>
+        </div>
+
+        <!-- Utilities (Mistakes only, Reset) -->
+        <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+          <span id="quiz-answered-count" class="text-xs font-semibold text-slate-500 dark:text-slate-400 mr-2">
+            0 / 40 Nasagutan
+          </span>
+          <button id="quiz-mistakes-only-btn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition flex items-center gap-1" title="Ipakita lamang ang mga aytem na namali">
+            <i class="fa-solid fa-filter"></i> Mga Mali Lamang
+          </button>
+          <button id="quiz-retake-btn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-rose-600 transition flex items-center gap-1" title="I-reset ang lahat ng sagot">
+            <i class="fa-solid fa-rotate-right"></i> I-reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Exam Submit Button (Visible only in Exam Mode) -->
+      <div id="quiz-exam-submit-wrapper" class="hidden p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 flex items-center justify-between gap-4">
+        <div>
+          <h4 class="text-sm font-bold text-amber-900 dark:text-amber-200">Exam Mode Aktibo:</h4>
+          <p class="text-xs text-amber-700 dark:text-amber-300">Hindi pa ipinapakita ang mga tamang sagot at paliwanag hangga't hindi mo ipinapasa ang buong pagsusulit.</p>
+        </div>
+        <button id="quiz-submit-exam-btn" type="button" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-900 font-extrabold text-sm shadow-md transition shrink-0 flex items-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i> Ipasa ang Pagsusulit
+        </button>
+      </div>
+
+      <!-- Questions List Container -->
+      <div id="quiz-questions-container" class="space-y-4">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- EXAM RESULTS MODAL -->
+  <div id="exam-results-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 max-w-md w-full rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-2xl text-center space-y-5 animate-toast">
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 text-white flex items-center justify-center text-3xl mx-auto shadow-lg shadow-amber-500/30">
+        <i class="fa-solid fa-trophy"></i>
+      </div>
+      <div>
+        <h3 class="text-2xl font-black text-slate-900 dark:text-white">Opisyal na Resulta ng Pagsusulit</h3>
+        <p class="text-xs text-slate-500 mt-1">Pagtatanong at Pagmumungkahi (Sining, Etika, at Retorika)</p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Nakuha Mong Iskor</span>
+        <div id="exam-score-num" class="text-4xl font-black text-blue-600 dark:text-blue-400">0 / 40</div>
+        <div id="exam-score-pct" class="text-sm font-bold text-emerald-600 dark:text-emerald-400">0%</div>
+      </div>
+
+      <div id="exam-feedback-message" class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-left p-3.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800">
+        <!-- Feedback text -->
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="close-exam-modal" type="button" class="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition">
+          Suriin ang mga Paliwanag
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors">
+    <div class="max-w-6xl mx-auto px-4 space-y-2">
+      <div class="flex items-center justify-center gap-2 font-bold text-slate-700 dark:text-slate-200">
+        <span>Kagamitang Pampagkatuto sa Filipino</span>
+        <span>•</span>
+        <span>Komunikasyon at Pananaliksik sa Wika at Kulturang Pilipino</span>
+      </div>
+      <p>
+        Binuo alinsunod sa pamantayan ng ortograpiya ng Komisyon sa Wikang Filipino (KWF). Dinisenyo para sa aktibong recall at pagsasanay.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
